@@ -17,10 +17,11 @@ def get_image_url(url,title, max_retries = 3) :
         try :
             # 지연
             sleep_interval = random.uniform(0.5, 1.5)
+            # sleep_interval = random.uniform(2.0, 4.0)
             time.sleep(sleep_interval)
 
             headers = {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36'
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36 (compatible; Yeti/1.1; +https://naver.me/spd)'
             }
             response = requests.get(url, headers=headers)
             response.raise_for_status()  # Raises HTTPError for bad responses
@@ -81,10 +82,11 @@ def get_basic_data(url,title, max_retries = 3):
         try :
             # 지연
             sleep_interval = random.uniform(0.5, 1.5)
+            # sleep_interval = random.uniform(2.0, 4.0)
             time.sleep(sleep_interval)
 
             headers = {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36'
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36 (compatible; Yeti/1.1; +https://naver.me/spd)'
             }
             response = requests.get(url, headers=headers)
             response.raise_for_status()  # Raises HTTPError for bad responses
@@ -134,10 +136,11 @@ def get_movie_data(title, max_retries = 3):
 
             #지연
             sleep_interval = random.uniform(0.5, 1.5)
+            # sleep_interval = random.uniform(2.0, 4.0)
             time.sleep(sleep_interval)
 
             headers = {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36'
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36 (compatible; Yeti/1.1; +https://naver.me/spd)'
             }
             response = requests.get(url, headers=headers)
             response.raise_for_status()  # Raises HTTPError for bad responses
@@ -201,6 +204,7 @@ def get_movie_data(title, max_retries = 3):
             basic_info = get_basic_data(basic_url, title)
 
             result = {"movieTitleEng": english_title, "movieScore": movie_score, "peopleVoted": people_voted, "moviePoster": image_urls.get("poster"), "movieStills": image_urls.get("stills"), "movieRuntime": basic_info.get("runtime"), "moviePlot": basic_info.get("plot")}
+            # result = {"movieTitleEng": english_title, "movieScore": movie_score, "peopleVoted": people_voted}
             # print(result)
             return result
 
@@ -209,11 +213,11 @@ def get_movie_data(title, max_retries = 3):
                 print(f'Error: {str(e)} - Retry {retries + 1}/{max_retries}')
             retries += 1
         except Exception as e :
-            if DEBUG_MODE:
-                print(f'Error: {str(e)}')
+            # if DEBUG_MODE:
+            print(f'Error {title} : {str(e)}')
             return {}
 
     return {'error': '3번 시도 후에도 실패'}
 
 
-get_movie_data("서울의 봄")
+get_movie_data("미션 임파서블: 폴아웃")
