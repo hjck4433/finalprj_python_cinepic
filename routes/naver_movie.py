@@ -1,7 +1,5 @@
 import requests
-import json
 from bs4 import BeautifulSoup
-from flask import jsonify
 import time
 import random
 import re
@@ -220,4 +218,57 @@ def get_movie_data(title, max_retries = 3):
     return {'error': '3번 시도 후에도 실패'}
 
 
-get_movie_data("미션 임파서블: 폴아웃")
+# get_movie_data("미션 임파서블: 폴아웃")
+
+# 감독 정보 가져오기
+def get_director(title, max_retries = 3):
+    retries = 0
+    while retries < max_retries:
+        if DEBUG_MODE:
+            print(f'{title}의 추가 정보 가져오는 중 / 시도 : {retries + 1}')
+        try:
+
+            url = 'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=영화+' + title
+
+            # 지연
+            sleep_interval = random.uniform(0.5, 1.5)
+            # sleep_interval = random.uniform(2.0, 4.0)
+            time.sleep(sleep_interval)
+
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36 (compatible; Yeti/1.1; +https://naver.me/spd)'
+            }
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()  # Raises HTTPError for bad responses
+
+            soup = BeautifulSoup(response.text, 'html.parser')
+            # main_el = soup.find('body', class_='wrap-new api_animation').find('dl', class_='info')
+            # outer_els = main_el.find_all('div', class_='info_group')
+
+            # main_el = soup.find('body', class_='wrap-new api_animation')
+
+            director_outer = soup.find('div', class_='middle_title').find_next('div').find('div', class_='area_card')
+            try:
+                director = director_outer.find('strong', class_='name').find('a', class_='_text').text.strip()
+            except AttributeError:
+                try:
+                    director = director_outer.find('strong', class_='name').find('span', class_='_text').text.strip()
+                except AttributeError:
+                    director = ""
+
+            result = director
+            # print(result)
+            return result
+
+        except requests.exceptions.RequestException as e:
+            if DEBUG_MODE:
+                print(f'Error: {str(e)} - Retry {retries + 1}/{max_retries}')
+            retries += 1
+        except Exception as e:
+            # if DEBUG_MODE:
+            print(f'Error {title} : {str(e)}')
+            return {}
+
+    return {'error': '3번 시도 후에도 실패'}
+
+# get_director("극장판 엉덩이 탐정: 미스터리 가면 ~최강의 대결")

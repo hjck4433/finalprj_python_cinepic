@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-from naver_movie import get_movie_data
+from naver_movie import get_movie_data, get_director
 
 def filter_movie_csv() :
     file_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'boxoffice_kr.csv')
@@ -110,6 +110,23 @@ def final_filter_data():
 
 # final_filter_data()
 
+def add_director():
+    file_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'final_boxoffice.csv')
+
+    try:
+        data_df = pd.read_csv(file_path, encoding='utf-8')
+        # 감독 정보가 없으면
+        rows_to_update = data_df['movieDirector'].isnull()
+        # 감독 정보 추가
+        data_df.loc[rows_to_update, 'movieDirector'] = data_df.loc[rows_to_update, 'movieTitle'].apply(get_director)
+
+        data_df.to_csv(file_path, index=False, encoding='utf-8-sig')
+
+        print("저장 완료")
+    except Exception as e:
+        print(f"감독 정보 추가하는 중 오류: {str(e)}")
+
+# add_director()
 
 # DB 저장용 csv 파일 저장
 def csv_for_db():
@@ -134,4 +151,4 @@ def csv_for_db():
     except Exception as e:
         print(f"db용 파일 저장 중 오류 : {str(e)}")
 
-# csv_for_db()
+csv_for_db()
