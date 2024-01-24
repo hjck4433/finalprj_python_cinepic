@@ -19,6 +19,8 @@ def filter_movie_csv() :
     # filtered_csv = pd.read_csv(filtered_file_path, encoding='utf-8')
     # print(filtered_csv)
 
+# filter_movie_csv()
+
 naver_data_cnt = 0
 naver_empty_cnt = 0
 
@@ -81,7 +83,55 @@ def save_naver_info():
     except Exception as e:
         print(f"error while saving : {str(e)}")
 
-
-# filter_movie_csv()
-
 # save_naver_info()
+
+def final_filter_data():
+    input_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'info_added_boxoffice_2.csv')
+    output_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'final_boxoffice.csv')
+
+    try:
+        data_df = pd.read_csv(input_path, encoding='utf-8')
+
+        # movieGenre 및 movieScore 열에 데이터가 있는 행만 필터링
+        filtered_df = data_df.dropna(subset=['movieGenre', 'movieScore']).copy()
+
+        # movieId 값을 row number로 바꿈(고유값 처리)
+        filtered_df.reset_index(drop=True, inplace=True)
+        # filtered_df['movieId'] = filtered_df.index + 1
+        filtered_df.loc[:, 'movieId'] = filtered_df.index + 1
+
+        # 필터링된 데이터를 새로운 CSV 파일로 저장
+        filtered_df.to_csv(output_path, index=False, encoding='utf-8-sig')
+        
+        print("저장 완료")
+
+    except Exception as e:
+        print(f"최종 저장 중 오류 발생: {str(e)}")
+
+# final_filter_data()
+
+
+# DB 저장용 csv 파일 저장
+def csv_for_db():
+    input_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'final_boxoffice.csv')
+    output_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'movie_db.csv')
+
+    try:
+        data_df = pd.read_csv(input_path, encoding='utf-8')
+
+        columns_to_keep = ['movieId', 'movieTitle', 'movieTitleEng', 'movieRelease', 'movieGenre',
+                           'movieNation', 'movieGrade', 'movieRuntime', 'movieScore', 'movieDirector', 'movieActors',
+                           'moviePlot', 'moviePoster', 'movieStills']
+
+        db_df = data_df[columns_to_keep]
+
+        db_df.to_csv(output_path, index=False, encoding='utf-8-sig')
+
+        print("저장 완료")
+
+        db_df = data_df[columns_to_keep]
+
+    except Exception as e:
+        print(f"db용 파일 저장 중 오류 : {str(e)}")
+
+# csv_for_db()
