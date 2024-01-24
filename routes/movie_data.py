@@ -151,4 +151,33 @@ def csv_for_db():
     except Exception as e:
         print(f"db용 파일 저장 중 오류 : {str(e)}")
 
-csv_for_db()
+# csv_for_db()
+
+# ML 용 csv 파일 저장
+def csv_for_ml():
+    input_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'final_boxoffice.csv')
+    output_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'recs_data_set.csv')
+
+    try:
+        data_df = pd.read_csv(input_path, encoding='utf-8')
+
+        # 학습에 사용할 컬럼
+        columns_to_keep = ['movieId', 'movieTitle', 'audience', 'screen', 'screening', 'movieRelease',
+                           'movieGenre', 'movieNation', 'movieGrade', 'movieRuntime', 'movieScore', 'peopleVoted',
+                           'movieDirector', 'movieActors', 'moviePlot']
+
+        # 배우를 알 수 없는 경우에 대한 처리
+        data_df['movieActors'].fillna('알수없음', inplace=True)
+
+        db_df = data_df[columns_to_keep]
+
+        db_df.to_csv(output_path, index=False, encoding='utf-8-sig')
+
+        print("저장 완료")
+
+        db_df = data_df[columns_to_keep]
+
+    except Exception as e:
+        print(f"db용 파일 저장 중 오류 : {str(e)}")
+
+# csv_for_ml()
