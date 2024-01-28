@@ -40,7 +40,7 @@ def preprocess_title(title, stopwords):
     title = re.sub(r'[^\w\s]', '', title)
 
     # Hannanum을 사용해 토큰화
-    tokenizer = Okt()
+    tokenizer = Hannanum()
     tokens = tokenizer.morphs(title)
     # 불용어 제거
     tokens = [token for token in tokens if token not in stopwords]
@@ -56,8 +56,8 @@ def preprocess_plot(plot, stopwords):
     #특수문자 제거
     plot = re.sub(r'[^\w\s]', '', plot)
 
-    # Okt를 사용해 토큰화
-    tokenizer = Okt()
+    # Hannanum를 사용해 토큰화
+    tokenizer = Hannanum()
     tokens = tokenizer.morphs(plot)
 
     # 불용어 제거
@@ -139,7 +139,7 @@ def load_stopwords(stopwords_file):
     return set(stopwords)
 
 input_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'recs_data_set.csv')
-output_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'preprocessed_data_okt_v3.csv')
+output_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'preprocessed_data_hannanum_v3.csv')
 data = pd.read_csv(input_path, encoding='utf-8')
 
 stopword_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'StopWords.txt')
