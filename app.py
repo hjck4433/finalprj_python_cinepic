@@ -1,5 +1,6 @@
 from flask import Flask, Response
 from routes.theater import get_theater_data
+from routes.movies import send_movie_data
 from flask_cors import CORS
 import requests
 
@@ -9,6 +10,11 @@ CORS(app, origins=['http://localhost:8111'])
 @app.route('/api/theater',methods=['GET'])
 def theater_data():
     result = get_theater_data()
+    return Response(result, content_type='application/json; charset=utf-8')
+
+@app.route('/api/movies', methods=['GET'])
+def movie_data():
+    result = send_movie_data()
     return Response(result, content_type='application/json; charset=utf-8')
 
 
