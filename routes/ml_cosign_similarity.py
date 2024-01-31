@@ -93,5 +93,5 @@ end_time = time.time()
 elapsed_time = end_time - start_time
 
 # 상위 추천 영화 출력
-print(recommended_movies[['movieId', 'movieTitle', 'movieScore', 'similarity_score']].head(10))
+print(recommended_movies[['movieId', 'movieTitle', 'movieScore', 'similarity_score']].head(4))
 print(f"The code took {elapsed_time} seconds to run.")

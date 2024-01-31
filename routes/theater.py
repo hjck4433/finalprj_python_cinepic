@@ -16,6 +16,8 @@ def get_theater_data() :
     # boolean
     theater_csv['isSpecialScreen'] = theater_csv['isSpecialScreen'].apply(convert_boolean)
 
+    theater_csv['seats'] = theater_csv['seats'].str.replace(',', '').astype(int)
+
     # 숫자로 변환
     columns_to_convert = ['theaterId','screens', 'seats', 'screenFilm', 'screen2D', 'screen3D', 'screen4D', 'screenImax',
                           'latitude', 'longitude']

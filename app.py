@@ -1,8 +1,9 @@
-from flask import Flask, Response
+from flask import Flask, Response, request
 from routes.theater import get_theater_data
 from routes.movies import send_movie_data
+from routes.get_recommendation import calculate_recommendations
 from flask_cors import CORS
-import requests
+
 
 app = Flask(__name__)
 CORS(app, origins=['http://localhost:8111'])
@@ -17,6 +18,13 @@ def movie_data():
     result = send_movie_data()
     return Response(result, content_type='application/json; charset=utf-8')
 
+@app.route('/api/recommendation', methods=['POST'])
+def movie_recs():
+    user_preferences = request.json
+
+    result = calculate_recommendations(user_preferences)
+
+    return Response(result, content_type='application/json; charset=utf-8')
 
 if __name__ == '__main__':
     app.run(debug=True)
