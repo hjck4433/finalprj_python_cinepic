@@ -79,6 +79,8 @@ def calculate_recommendations(user_preferences):
     # 정렬 조건을 우선순위, 유사도 순으로 설정
     recommended_movies = data.sort_values(by=['priority', 'similarity_score'], ascending=[False, False])
 
+    # recommended_movies = data.sort_values(by=['similarity_score'], ascending=[False])
+
     recs = recommended_movies.head(4)
     output = {f"recs{i+1}": int(recs.iloc[i]['movieId']) for i in range(len(recs))}
     output_json = json.dumps(output, ensure_ascii=False, indent=4)
