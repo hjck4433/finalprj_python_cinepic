@@ -165,7 +165,10 @@ def index_movies():
 
         # Elasticsearch에서 모든 영화를 검색하여 총 영화 수 출력
         response = es.search(index=index_name, body={"query": {"match_all": {}}})
-        print(f"Total movies indexed: {response['hits']['total']['value']}")
+        total_movies = response['hits']['total']['value']
+        success_message = f"Indexing completed successfully. Total movies indexed: {total_movies}"
+        return success_message
 
     except Exception as e:
         logging.error("An error occurred during indexing:", exc_info=True)
+        return f"An error occurred during indexing: {str(e)}"
